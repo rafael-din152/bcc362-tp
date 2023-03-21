@@ -4,16 +4,9 @@ const app = express()
 const bodyParser = require('body-parser')
 const db = require('./db/produtos')
 
-app.use(cors())
-app.use(function (req, res, next) {
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('Access-Control-Allow-Methods', '*');
-    res.setHeader('Access-Control-Allow-Headers', '*');
-    res.setHeader('Access-Control-Allow-Credentials', true);
-    next();
-});
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
+app.use(cors())
 
 app.post("/produtos", async (req, res) => {
     const results = await db.createProduto(req.body)

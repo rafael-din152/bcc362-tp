@@ -2,28 +2,16 @@ version: '3'
 
 services:
   db:
-    image: mysql:5.7
+    container_name: mysql
+    image: mysql:latest
     restart: always
     environment:
-      MYSQL_DATABASE: 'tp5'
-      # So you don't have to use root, but you can if you like
-      MYSQL_USER: 'user'
-      # You can use whatever password you like
-      MYSQL_PASSWORD: 'password'
-      # Password for root access
-      MYSQL_ROOT_PASSWORD: 'password'
+      - MYSQL_ROOT_PASSWORD=root
+    ports:
+     - "3306:3306"
     networks:
       tp5-bcc362:
         ipv4_address: 10.5.0.5
-    ports:
-      # <Port exposed> : < MySQL Port running inside container>
-      - '3306:3306'
-    expose:
-      # Opens port 3306 on the container
-      - '3306'
-      # Where our data will be persisted
-    volumes:
-      - my-db:/var/lib/mysql
 
   api:
     container_name: tp5-server
@@ -35,7 +23,6 @@ services:
         ipv4_address: 10.5.0.6
     depends_on:
      - db
-     
   front:
     container_name: tp5-interface
     build: ./Front/
@@ -53,7 +40,4 @@ networks:
     ipam:
      config:
        - subnet: 10.5.0.0/16
-
-# Names our volume
-volumes:
-  my-db:
+         gateway: 10.5.0.1
